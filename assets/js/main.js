@@ -45,6 +45,31 @@
     const body = document.body;
     const bgMusic = document.getElementById("bgMusic");
     const audioToggle = document.getElementById("audioToggle");
+    const documentElement = document.documentElement;
+
+    async function enterFullscreen() {
+      try {
+        if (document.fullscreenElement) {
+          return;
+        }
+
+        if (documentElement.requestFullscreen) {
+          await documentElement.requestFullscreen();
+          return;
+        }
+
+        if (documentElement.webkitRequestFullscreen) {
+          documentElement.webkitRequestFullscreen();
+          return;
+        }
+
+        if (documentElement.msRequestFullscreen) {
+          documentElement.msRequestFullscreen();
+        }
+      } catch (error) {
+        console.warn("Mode layar penuh tidak tersedia di browser ini.", error);
+      }
+    }
 
     async function playAudio() {
       try {
@@ -56,6 +81,7 @@
     }
 
     openButton.addEventListener("click", async () => {
+      await enterFullscreen();
       overlay.classList.add("is-hidden");
       body.classList.remove("locked");
       await playAudio();
