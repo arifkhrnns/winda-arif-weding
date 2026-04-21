@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Undangan Wedding | Arif & Winda</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/logo.png?v=2" />
+  <link rel="shortcut icon" href="./assets/images/logo.png?v=2" />
+  <link rel="apple-touch-icon" href="./assets/images/logo.png?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -466,20 +469,28 @@
     }
 
     .gallery-grid {
-      grid-template-columns: 1.2fr 0.8fr 0.8fr;
-      grid-auto-rows: 260px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-auto-rows: 96px;
+      grid-auto-flow: dense;
       margin-top: 42px;
+      gap: 8px;
     }
 
     .gallery-item {
       position: relative;
       overflow: hidden;
-      border-radius: 28px;
-      box-shadow: 0 20px 44px rgba(90, 62, 42, 0.12);
+      border-radius: 0;
+      box-shadow: none;
+      background: #efe6da;
     }
 
-    .gallery-item:nth-child(1) { grid-row: span 2; }
-    .gallery-item:nth-child(4) { grid-column: span 2; }
+    .gallery-item.portrait { grid-column: span 2; grid-row: span 3; }
+    .gallery-item.landscape { grid-column: span 4; grid-row: span 2; }
+    .gallery-item.featured { grid-column: span 4; grid-row: span 4; }
+    .gallery-item.tall { grid-row: span 4; }
+    .gallery-item.portrait img { aspect-ratio: 3 / 4; }
+    .gallery-item.landscape img,
+    .gallery-item.featured img { aspect-ratio: 4 / 3; }
 
     .gallery-item img {
       width: 100%;
@@ -488,7 +499,7 @@
       transition: transform 0.6s ease;
     }
 
-    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item:hover img { transform: scale(1.03); }
 
     .rsvp-wrap {
       display: grid;
@@ -739,14 +750,14 @@
       }
 
       .gallery-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: 92px;
+        gap: 8px;
       }
-
-      .gallery-item:nth-child(1),
-      .gallery-item:nth-child(4) {
-        grid-column: auto;
-        grid-row: auto;
-      }
+      .gallery-item.portrait { grid-column: span 2; grid-row: span 3; }
+      .gallery-item.landscape { grid-column: span 4; grid-row: span 2; }
+      .gallery-item.featured { grid-column: span 4; grid-row: span 3; }
+      .gallery-item.tall { grid-row: span 4; }
 
       .hero-card { min-height: 540px; }
       .section { padding: 82px 0; }
@@ -792,7 +803,32 @@
       }
       .quote-box { margin-top: -36px; padding: 28px 22px; }
       .countdown-grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+      .gallery-grid {
+        display: block;
+        column-count: 2;
+        column-gap: 6px;
+      }
+      .gallery-item {
+        display: block;
+        width: 100%;
+        margin: 0 0 6px;
+        break-inside: avoid;
+      }
+      .gallery-item.portrait,
+      .gallery-item.landscape,
+      .gallery-item.featured,
+      .gallery-item.tall {
+        grid-column: auto;
+        grid-row: auto;
+      }
+      .gallery-item img {
+        height: auto;
+      }
+      .gallery-item.portrait img,
+      .gallery-item.landscape img,
+      .gallery-item.featured img {
+        aspect-ratio: auto;
+      }
       .overlay-card { padding: 34px 22px; }
       .hero-actions { flex-direction: column; align-items: stretch; }
       .btn { width: 100%; }
@@ -994,10 +1030,24 @@
         </div>
 
         <div class="gallery-grid">
-          <figure class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80" alt="Galeri foto 1" /></figure>
-          <figure class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1000&q=80" alt="Galeri foto 2" /></figure>
-          <figure class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80" alt="Galeri foto 3" /></figure>
-          <figure class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80" alt="Galeri foto 4" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/Engagement%20Winda%26Arif-006.jpg" alt="Galeri Winda dan Arif 1" loading="lazy" /></figure>
+          <figure class="gallery-item featured reveal"><img src="./assets/images/Engagement%20Winda%26Arif-055.jpg" alt="Galeri Winda dan Arif 2" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-037.jpg" alt="Galeri Winda dan Arif 3" loading="lazy" /></figure>
+          <figure class="gallery-item portrait featured reveal"><img src="./assets/images/Engagement%20Winda%26Arif-041.jpg" alt="Galeri Winda dan Arif 4" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-076.jpg" alt="Galeri Winda dan Arif 5" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-061.jpg" alt="Galeri Winda dan Arif 6" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-071.jpg" alt="Galeri Winda dan Arif 7" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-093.jpg" alt="Galeri Winda dan Arif 8" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-098.jpg" alt="Galeri Winda dan Arif 18" loading="lazy" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/Engagement%20Winda%26Arif-073.jpg" alt="Galeri Winda dan Arif 9" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-094.jpg" alt="Galeri Winda dan Arif 10" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-106.jpg" alt="Galeri Winda dan Arif 11" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-113.jpg" alt="Galeri Winda dan Arif 12" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-118.jpg" alt="Galeri Winda dan Arif 13" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-128.jpg" alt="Galeri Winda dan Arif 14" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-162.jpg" alt="Galeri Winda dan Arif 15" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-207.jpg" alt="Galeri Winda dan Arif 16" loading="lazy" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/IMG-20260420-WA0148.jpg" alt="Galeri Winda dan Arif 17" loading="lazy" /></figure>
         </div>
       </div>
     </section>
