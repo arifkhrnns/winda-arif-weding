@@ -11,6 +11,7 @@
       minutes: document.getElementById("minutes"),
       seconds: document.getElementById("seconds")
     };
+    const saveCalendarButton = document.getElementById("saveCalendar");
 
     function updateCountdown() {
       const now = Date.now();
@@ -30,6 +31,52 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
+    function formatIcsDate(date) {
+      return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+    }
+
+    function buildCalendarFile() {
+      const startDate = new Date("2026-07-05T08:00:00+07:00");
+      const endDate = new Date("2026-07-05T15:30:00+07:00");
+      const createdDate = new Date();
+      const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Winda Arif Wedding//Undangan Digital//ID",
+        "CALSCALE:GREGORIAN",
+        "BEGIN:VEVENT",
+        `UID:winda-arif-${startDate.getTime()}@undangan-digital`,
+        `DTSTAMP:${formatIcsDate(createdDate)}`,
+        `DTSTART:${formatIcsDate(startDate)}`,
+        `DTEND:${formatIcsDate(endDate)}`,
+        "SUMMARY:Winda & Arif Wedding Day",
+        "DESCRIPTION:Akad Nikah pukul 08.00 WIB dan resepsi sesuai sesi undangan Anda.",
+        "LOCATION:Gedung Serbaguna Ath Thoyyibah, Bekasi",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      return new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    }
+
+    function downloadCalendarFile() {
+      const calendarFile = buildCalendarFile();
+      const fileUrl = URL.createObjectURL(calendarFile);
+      const tempLink = document.createElement("a");
+      tempLink.href = fileUrl;
+      tempLink.download = "winda-arif-save-the-date.ics";
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      tempLink.remove();
+      window.setTimeout(() => URL.revokeObjectURL(fileUrl), 1000);
+    }
+
+    if (saveCalendarButton) {
+      saveCalendarButton.addEventListener("click", () => {
+        downloadCalendarFile();
+      });
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -46,6 +93,15 @@
     const bgMusic = document.getElementById("bgMusic");
     const audioToggle = document.getElementById("audioToggle");
     const documentElement = document.documentElement;
+    const experienceScroll = document.querySelector(".experience-scroll");
+    const desktopExperienceQuery = window.matchMedia("(min-width: 821px)");
+    let invitationOpened = false;
+    let userPausedAudio = false;
+    let autoPausedAudio = false;
+
+    function shouldProxyScroll() {
+      return desktopExperienceQuery.matches && experienceScroll && !body.classList.contains("locked");
+    }
 
     async function enterFullscreen() {
       try {
@@ -73,10 +129,35 @@
 
     async function playAudio() {
       try {
-        bgMusic.volume = 0.35;
+        bgMusic.volume = 1;
         await bgMusic.play();
+        audioToggle.textContent = "♪";
       } catch (error) {
         audioToggle.textContent = "♫";
+      }
+    }
+
+    function pauseAudio() {
+      bgMusic.pause();
+      audioToggle.textContent = "♫";
+    }
+
+    async function syncAudioWithPageState() {
+      if (!invitationOpened || userPausedAudio) {
+        return;
+      }
+
+      const pageInactive = document.hidden || !document.hasFocus();
+
+      if (pageInactive && !bgMusic.paused) {
+        autoPausedAudio = true;
+        pauseAudio();
+        return;
+      }
+
+      if (!pageInactive && autoPausedAudio && bgMusic.paused) {
+        autoPausedAudio = false;
+        await playAudio();
       }
     }
 
@@ -84,18 +165,59 @@
       await enterFullscreen();
       overlay.classList.add("is-hidden");
       body.classList.remove("locked");
+      invitationOpened = true;
+      userPausedAudio = false;
+      autoPausedAudio = false;
       await playAudio();
     });
 
     audioToggle.addEventListener("click", async () => {
       if (bgMusic.paused) {
+        userPausedAudio = false;
+        autoPausedAudio = false;
         await playAudio();
-        audioToggle.textContent = "♪";
       } else {
-        bgMusic.pause();
-        audioToggle.textContent = "♫";
+        userPausedAudio = true;
+        autoPausedAudio = false;
+        pauseAudio();
       }
     });
+
+    document.addEventListener("visibilitychange", () => {
+      syncAudioWithPageState();
+    });
+
+    window.addEventListener("blur", () => {
+      syncAudioWithPageState();
+    });
+
+    window.addEventListener("focus", () => {
+      syncAudioWithPageState();
+    });
+
+    window.addEventListener("pagehide", () => {
+      if (!bgMusic.paused) {
+        autoPausedAudio = true;
+        pauseAudio();
+      }
+    });
+
+    window.addEventListener("wheel", (event) => {
+      if (!shouldProxyScroll()) {
+        return;
+      }
+
+      if (event.target.closest(".experience-scroll")) {
+        return;
+      }
+
+      event.preventDefault();
+      experienceScroll.scrollBy({
+        top: event.deltaY,
+        left: 0,
+        behavior: "auto"
+      });
+    }, { passive: false });
 
     const sessionConfig = {
       "1": {

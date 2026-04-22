@@ -32,34 +32,45 @@
 
   <button class="audio-toggle" id="audioToggle" aria-label="Atur musik">♪</button>
 
-  <header class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy reveal">
-        <div class="eyebrow">Simpan Tanggal</div>
-        <div class="display">Winda<br />&amp; Arif</div>
-        <p class="subhead">Minggu, 5 Juli 2026. Merayakan kisah yang tumbuh dari pertemanan, lalu berlabuh dalam satu janji seumur hidup.</p>
-        <div class="hero-date">05 . 07 . 2026 | Bekasi</div>
-        <div class="session-pill" id="sessionPill">Resepsi Sesi 1</div>
+  <div class="experience-layout">
+    <aside class="experience-visual" aria-hidden="true">
+      <div class="experience-visual-copy">
+        <div class="eyebrow">Undangan Pernikahan</div>
+        <div class="display">Winda &amp; Arif</div>
+        <p>Minggu, 5 Juli 2026</p>
       </div>
+    </aside>
 
-      <div class="hero-card reveal">
-        <div class="hero-photo"></div>
-        <div class="hero-card-content">
-          <strong>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</strong>
-          <span>QS. Ar-Rum: 21</span>
+    <div class="experience-panel">
+      <div class="experience-scroll">
+        <header class="hero">
+          <div class="container hero-grid">
+            <div class="hero-copy reveal">
+              <div class="eyebrow">Simpan Tanggal</div>
+              <div class="display">Winda<br />&amp; Arif</div>
+              <p class="subhead">Minggu, 5 Juli 2026. Merayakan kisah yang tumbuh dari pertemanan, lalu berlabuh dalam satu janji seumur hidup.</p>
+              <div class="hero-date">05 . 07 . 2026 | Bekasi</div>
+              <div class="session-pill" id="sessionPill">Resepsi Sesi 1</div>
+            </div>
+
+            <div class="hero-card reveal">
+              <div class="hero-photo"></div>
+              <div class="hero-card-content">
+                <strong>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</strong>
+                <span>QS. Ar-Rum: 21</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="container">
+          <section class="quote-box glass-card reveal">
+            <p>Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada momen sakral pernikahan kami.</p>
+            <span class="verse">Undangan Pernikahan</span>
+          </section>
         </div>
-      </div>
-    </div>
-  </header>
 
-  <div class="container">
-    <section class="quote-box glass-card reveal">
-      <p>Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada momen sakral pernikahan kami.</p>
-      <span class="verse">Undangan Pernikahan</span>
-    </section>
-  </div>
-
-  <main>
+        <main>
     <section class="section" id="countdown">
       <div class="ornament"></div>
       <div class="container">
@@ -73,6 +84,14 @@
           <article class="count-card reveal"><strong id="hours">00</strong><span>Jam</span></article>
           <article class="count-card reveal"><strong id="minutes">00</strong><span>Menit</span></article>
           <article class="count-card reveal"><strong id="seconds">00</strong><span>Detik</span></article>
+        </div>
+        <div class="countdown-actions reveal">
+          <button class="btn btn-secondary calendar-btn" id="saveCalendar" type="button">
+            <svg class="calendar-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1H6Z" />
+            </svg>
+            <span>Simpan ke Kalender</span>
+          </button>
         </div>
       </div>
     </section>
@@ -92,6 +111,12 @@
             <h3>Winda Widiyanti</h3>
             <p class="family">Putri Kedua dari Bapak Jojo Sutarjo &amp; Ibu Ida Setiada</p>
             <p>Seorang perempuan yang lembut, tenang, dan selalu mampu membuat rumah terasa lebih hangat.</p>
+            <a class="social-link" href="https://instagram.com/wnd.wdynti" target="_blank" rel="noopener noreferrer" aria-label="Instagram Winda">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9A4.5 4.5 0 0 1 16.5 21h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3Zm0 1.8A2.7 2.7 0 0 0 4.8 7.5v9a2.7 2.7 0 0 0 2.7 2.7h9a2.7 2.7 0 0 0 2.7-2.7v-9a2.7 2.7 0 0 0-2.7-2.7h-9Zm9.45 1.35a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1ZM12 7.8A4.2 4.2 0 1 1 7.8 12 4.2 4.2 0 0 1 12 7.8Zm0 1.8A2.4 2.4 0 1 0 14.4 12 2.4 2.4 0 0 0 12 9.6Z" />
+              </svg>
+              wnd.wdynti
+            </a>
           </article>
           <article class="couple-card glass-card reveal">
             <div class="couple-photo">
@@ -100,6 +125,12 @@
             <h3>M. Arif Khairunas</h3>
             <p class="family">Putra Ketiga dari Bapak Tri Wiyoto &amp; Ibu Siti Nurhasanah</p>
             <p>Seorang laki-laki yang tenang, setia, dan memilih cinta sebagai keputusan terbesar dalam hidupnya.</p>
+            <a class="social-link" href="https://instagram.com/arifkhrnns" target="_blank" rel="noopener noreferrer" aria-label="Instagram Arif">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9A4.5 4.5 0 0 1 16.5 21h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3Zm0 1.8A2.7 2.7 0 0 0 4.8 7.5v9a2.7 2.7 0 0 0 2.7 2.7h9a2.7 2.7 0 0 0 2.7-2.7v-9a2.7 2.7 0 0 0-2.7-2.7h-9Zm9.45 1.35a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1ZM12 7.8A4.2 4.2 0 1 1 7.8 12 4.2 4.2 0 0 1 12 7.8Zm0 1.8A2.4 2.4 0 1 0 14.4 12 2.4 2.4 0 0 0 12 9.6Z" />
+              </svg>
+              arifkhrnns
+            </a>
           </article>
         </div>
       </div>
@@ -201,24 +232,24 @@
         </div>
 
         <div class="gallery-grid">
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/Engagement%20Winda%26Arif-006.jpg" alt="Galeri Winda dan Arif 1" loading="lazy" /></figure>
-          <figure class="gallery-item featured reveal"><img src="./assets/images/Engagement%20Winda%26Arif-055.jpg" alt="Galeri Winda dan Arif 2" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-037.jpg" alt="Galeri Winda dan Arif 3" loading="lazy" /></figure>
-          <figure class="gallery-item portrait featured reveal"><img src="./assets/images/Engagement%20Winda%26Arif-041.jpg" alt="Galeri Winda dan Arif 4" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-076.jpg" alt="Galeri Winda dan Arif 5" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-061.jpg" alt="Galeri Winda dan Arif 6" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-071.jpg" alt="Galeri Winda dan Arif 7" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-093.jpg" alt="Galeri Winda dan Arif 8" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-098.jpg" alt="Galeri Winda dan Arif 18" loading="lazy" /></figure>
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/Engagement%20Winda%26Arif-073.jpg" alt="Galeri Winda dan Arif 9" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-094.jpg" alt="Galeri Winda dan Arif 10" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-106.jpg" alt="Galeri Winda dan Arif 11" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-113.jpg" alt="Galeri Winda dan Arif 12" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-118.jpg" alt="Galeri Winda dan Arif 13" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-128.jpg" alt="Galeri Winda dan Arif 14" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/Engagement%20Winda%26Arif-162.jpg" alt="Galeri Winda dan Arif 15" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/Engagement%20Winda%26Arif-207.jpg" alt="Galeri Winda dan Arif 16" loading="lazy" /></figure>
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/IMG-20260420-WA0148.jpg" alt="Galeri Winda dan Arif 17" loading="lazy" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-01.jpg" alt="Galeri Winda dan Arif 1" loading="lazy" /></figure>
+          <figure class="gallery-item featured reveal"><img src="./assets/images/gallery-02.jpg" alt="Galeri Winda dan Arif 2" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-03.jpg" alt="Galeri Winda dan Arif 3" loading="lazy" /></figure>
+          <figure class="gallery-item portrait featured reveal"><img src="./assets/images/gallery-04.jpg" alt="Galeri Winda dan Arif 4" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-05.jpg" alt="Galeri Winda dan Arif 5" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-06.jpg" alt="Galeri Winda dan Arif 6" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-07.jpg" alt="Galeri Winda dan Arif 7" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-08.jpg" alt="Galeri Winda dan Arif 8" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-18.jpg" alt="Galeri Winda dan Arif 18" loading="lazy" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-09.jpg" alt="Galeri Winda dan Arif 9" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-10.jpg" alt="Galeri Winda dan Arif 10" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-11.jpg" alt="Galeri Winda dan Arif 11" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-12.jpg" alt="Galeri Winda dan Arif 12" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-13.jpg" alt="Galeri Winda dan Arif 13" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-14.jpg" alt="Galeri Winda dan Arif 14" loading="lazy" /></figure>
+          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-15.jpg" alt="Galeri Winda dan Arif 15" loading="lazy" /></figure>
+          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-16.jpg" alt="Galeri Winda dan Arif 16" loading="lazy" /></figure>
+          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-17.jpg" alt="Galeri Winda dan Arif 17" loading="lazy" /></figure>
         </div>
       </div>
     </section>
@@ -333,15 +364,19 @@
         </div>
       </div>
     </section>
-  </main>
+        </main>
 
-  <footer class="footer">
-    <div class="container reveal">
-      <div class="eyebrow">Terima Kasih</div>
-      <div class="display">Arif &amp; Winda</div>
-      <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.</p>
+        <footer class="footer">
+          <div class="container reveal">
+            <div class="eyebrow">Terima Kasih</div>
+            <div class="display">Arif &amp; Winda</div>
+            <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.</p>
+            <img class="footer-logo" src="assets/images/logo-icon.png" alt="Logo brand" />
+          </div>
+        </footer>
+      </div>
     </div>
-  </footer>
+  </div>
 
   <div class="lightbox" id="galleryLightbox" aria-hidden="true">
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Tutup galeri">×</button>
