@@ -302,7 +302,7 @@
 
       try {
         const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&order=created_at.desc&limit=20`,
+          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -338,9 +338,16 @@
 
       const wishName = document.getElementById("wishName").value.trim();
       const wishText = document.getElementById("wishText").value.trim();
+      const wishWebsite = document.getElementById("wishWebsite").value.trim();
 
       if (!wishName || !wishText) {
         setWishStatus("Nama dan ucapan wajib diisi.");
+        return;
+      }
+
+      if (wishWebsite) {
+        wishForm.reset();
+        setWishStatus("Ucapan diterima. Terima kasih atas doa terbaiknya.");
         return;
       }
 
@@ -359,7 +366,7 @@
             "Content-Type": "application/json",
             apikey: SUPABASE_ANON_KEY,
             Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "return=representation"
+            Prefer: "return=minimal"
           },
           body: JSON.stringify({
             name: wishName,
@@ -373,7 +380,7 @@
 
         wishForm.reset();
         await fetchWishes();
-        setWishStatus("Ucapan berhasil dikirim. Terima kasih atas doa terbaiknya.");
+        setWishStatus("Ucapan berhasil dikirim dan akan tampil setelah disetujui.");
       } catch (error) {
         console.error(error);
         setWishStatus("Ucapan belum berhasil dikirim. Coba lagi beberapa saat lagi.");
