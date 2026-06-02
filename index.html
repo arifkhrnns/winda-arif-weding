@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260602-order-fix" />
 </head>
 <body class="locked">
   <div class="overlay" id="invitationCover">
@@ -158,11 +158,12 @@
                 <p>Gedung Serbaguna Ath Thoyyibah</p>
               </div>
             </div>
+            <a class="schedule-map-link" href="https://www.google.com/maps/search/?api=1&query=Gedung%20Serbaguna%20Ath%20Thoyyibah" target="_blank" rel="noopener noreferrer">Google Map</a>
           </article>
 
-          <article class="schedule-card glass-card reveal">
+          <article class="schedule-card schedule-card-reception glass-card reveal">
             <h3>Resepsi</h3>
-            <p id="receptionIntro">Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih.</p>
+            <p id="receptionIntro">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</p>
             <div class="meta-list">
               <div class="meta-item">
                 <strong>Tanggal &amp; Waktu</strong>
@@ -173,20 +174,10 @@
                 <p>Gedung Serbaguna Ath Thoyyibah</p>
               </div>
             </div>
-            <div class="session-note" id="sessionNote">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</div>
+            <a class="schedule-map-link" href="https://www.google.com/maps/search/?api=1&query=Gedung%20Serbaguna%20Ath%20Thoyyibah" target="_blank" rel="noopener noreferrer">Google Map</a>
+            
           </article>
         </div>
-
-        <article class="location-card glass-card reveal">
-          <iframe
-            class="map-frame"
-            loading="lazy"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5609.170949599116!2d107.07365809939031!3d-6.2263933059464796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698f3bc21ba17d%3A0xcbfa98e806216684!2sGedung%20Serbaguna%20Ath%20Thoyyibah!5e0!3m2!1sid!2sid!4v1776658557336!5m2!1sid!2sid"
-            title="Lokasi acara Gedung Serbaguna Ath Thoyyibah">
-          </iframe>
-        </article>
       </div>
     </section>
 
@@ -254,59 +245,6 @@
       </div>
     </section>
 
-    <section class="section" id="rsvp">
-      <div class="container">
-        <div class="section-title reveal">
-          <div class="eyebrow">Konfirmasi</div>
-          <h2>Konfirmasi Kehadiran</h2>
-          <p>Mohon kesediaannya untuk mengisi konfirmasi kehadiran sebagai bentuk perhatian dan doa restu bagi hari bahagia kami.</p>
-        </div>
-
-        <div class="rsvp-wrap">
-          <aside class="rsvp-side glass-card reveal">
-            <h3>Konfirmasi Kehadiran</h3>
-            <p>Isi konfirmasi kehadiran untuk membantu kami menyiapkan hari bahagia ini dengan lebih baik, lalu lanjutkan pengiriman melalui WhatsApp.</p>
-            <div class="rsvp-notes">
-              <div class="rsvp-note">Mohon hadir sesuai sesi yang tertera pada undangan Anda.</div>
-              <div class="rsvp-note">Silakan isi jumlah tamu sesuai rencana kehadiran.</div>
-              <div class="rsvp-note">Setelah klik kirim, WhatsApp akan terbuka otomatis.</div>
-            </div>
-          </aside>
-
-          <form class="rsvp-form glass-card reveal" id="rsvpForm">
-            <div class="form-grid">
-              <div class="field">
-                <label for="name">Nama</label>
-                <input id="name" name="name" type="text" placeholder="Nama lengkap" required />
-              </div>
-              <div class="field">
-                <label for="attendance">Kehadiran</label>
-                <select id="attendance" name="attendance" required>
-                  <option value="">Pilih kehadiran</option>
-                  <option value="Hadir">Hadir</option>
-                  <option value="Masih diusahakan">Masih diusahakan</option>
-                  <option value="Berhalangan">Berhalangan</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="guestCount">Jumlah tamu</label>
-                <select id="guestCount" name="guestCount">
-                  <option>1 Orang</option>
-                  <option>2 Orang</option>
-                  <option>3 Orang</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="message">Ucapan singkat</label>
-                <textarea id="message" name="message" placeholder="Tulis doa dan ucapan terbaik"></textarea>
-              </div>
-              <button class="btn btn-primary" type="submit">Kirim via WhatsApp</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
     <section class="section" id="gift">
       <div class="container">
         <div class="section-title reveal">
@@ -332,42 +270,53 @@
       </div>
     </section>
 
-    <section class="section" id="wishes">
+    <section class="section" id="guestbook">
       <div class="container">
         <div class="section-title reveal">
-          <div class="eyebrow">Ucapan</div>
-          <h2>Ucapan &amp; Doa</h2>
-          <p>Setiap doa dan ucapan hangat dari keluarga, sahabat, dan kerabat tercinta akan menjadi kenangan indah bagi kami.</p>
+          <div class="eyebrow">Konfirmasi &amp; Doa</div>
+          <h2>Ucapan Selamat &amp; Doa</h2>
+          <p>Silakan konfirmasi kehadiran sekaligus titipkan doa terbaik untuk mengiringi langkah awal kami.</p>
         </div>
 
-        <div class="wish-grid">
-          <form class="wish-form glass-card reveal" id="wishForm">
-            <h3>Kirim Ucapan</h3>
-            <div class="form-grid">
-              <div class="field">
-                <label for="wishName">Nama</label>
-                <input id="wishName" name="name" type="text" placeholder="Nama lengkap" maxlength="80" required />
-              </div>
-              <div class="field">
-                <label for="wishText">Doa dan ucapan</label>
-                <textarea id="wishText" name="message" placeholder="Semoga menjadi keluarga yang sakinah, mawaddah, warahmah." maxlength="500" required></textarea>
-              </div>
-              <div class="field field-honeypot" aria-hidden="true">
-                <label for="wishWebsite">Website</label>
-                <input id="wishWebsite" name="website" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-              <button class="btn btn-secondary" type="submit">Kirim Ucapan</button>
+        <div class="guestbook-wrap">
+          <form class="guestbook-form glass-card reveal" id="guestbookForm">
+            <div class="field">
+              <label for="guestbookName">Nama</label>
+              <input id="guestbookName" name="name" type="text" placeholder="Nama lengkap" maxlength="80" required />
             </div>
+            <div class="attendance-choice" role="radiogroup" aria-label="Konfirmasi kehadiran">
+              <label>
+                <input type="radio" name="attendance_status" value="Hadir" required />
+                <span>Hadir</span>
+              </label>
+              <label>
+                <input type="radio" name="attendance_status" value="Tidak Hadir" required />
+                <span>Tidak Hadir</span>
+              </label>
+            </div>
+            <div class="field">
+              <label for="guestbookMessage">Ucapan dan doa</label>
+              <textarea id="guestbookMessage" name="message" placeholder="Tulis ucapan terbaik Anda." maxlength="500" required></textarea>
+            </div>
+            <div class="field field-honeypot" aria-hidden="true">
+              <label for="guestbookWebsite">Website</label>
+              <input id="guestbookWebsite" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+            <button class="btn btn-primary" type="submit">Kirim</button>
+            <p class="guestbook-status" id="guestbookStatus"></p>
           </form>
 
-          <div class="wish-list glass-card reveal" id="wishList">
-            <h3>Pesan Tamu</h3>
-            <p class="wish-empty" id="wishStatus">Memuat ucapan tamu...</p>
-            <div id="wishItems"></div>
+          <div class="guestbook-list glass-card reveal">
+            <div class="guestbook-list-head">
+              <h3>Doa Tamu</h3>
+              <span id="guestbookCount">0 Ucapan</span>
+            </div>
+            <div id="guestbookItems"></div>
           </div>
         </div>
       </div>
     </section>
+
         </main>
 
         <footer class="footer">
@@ -394,6 +343,6 @@
     <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Foto berikutnya">&#10095;</button>
   </div>
 
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js?v=20260602-order-fix"></script>
 </body>
 </html>

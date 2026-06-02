@@ -92,8 +92,8 @@
     const body = document.body;
     const bgMusic = document.getElementById("bgMusic");
     const audioToggle = document.getElementById("audioToggle");
-    const documentElement = document.documentElement;
     const experienceScroll = document.querySelector(".experience-scroll");
+    const storyTimeline = document.querySelector(".story-grid");
     const desktopExperienceQuery = window.matchMedia("(min-width: 821px)");
     let invitationOpened = false;
     let userPausedAudio = false;
@@ -103,28 +103,18 @@
       return desktopExperienceQuery.matches && experienceScroll && !body.classList.contains("locked");
     }
 
-    async function enterFullscreen() {
-      try {
-        if (document.fullscreenElement) {
-          return;
-        }
-
-        if (documentElement.requestFullscreen) {
-          await documentElement.requestFullscreen();
-          return;
-        }
-
-        if (documentElement.webkitRequestFullscreen) {
-          documentElement.webkitRequestFullscreen();
-          return;
-        }
-
-        if (documentElement.msRequestFullscreen) {
-          documentElement.msRequestFullscreen();
-        }
-      } catch (error) {
-        console.warn("Mode layar penuh tidak tersedia di browser ini.", error);
+    function updateStoryProgress() {
+      if (!storyTimeline) {
+        return;
       }
+
+      const rect = storyTimeline.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const start = viewportHeight * 0.68;
+      const end = viewportHeight * 0.18;
+      const distance = Math.max(rect.height + start - end, 1);
+      const progress = Math.min(Math.max((start - rect.top) / distance, 0), 1);
+      storyTimeline.style.setProperty("--story-progress", `${(progress * 100).toFixed(2)}%`);
     }
 
     async function playAudio() {
@@ -162,7 +152,6 @@
     }
 
     openButton.addEventListener("click", async () => {
-      await enterFullscreen();
       overlay.classList.add("is-hidden");
       body.classList.remove("locked");
       invitationOpened = true;
@@ -219,6 +208,15 @@
       });
     }, { passive: false });
 
+    window.addEventListener("scroll", updateStoryProgress, { passive: true });
+    window.addEventListener("resize", updateStoryProgress);
+
+    if (experienceScroll) {
+      experienceScroll.addEventListener("scroll", updateStoryProgress, { passive: true });
+    }
+
+    updateStoryProgress();
+
     const sessionConfig = {
       "1": {
         label: "Resepsi Sesi 1",
@@ -239,39 +237,45 @@
     const session = params.get("sesi");
     const activeSession = sessionConfig[session] || sessionConfig["1"];
 
-    document.getElementById("sessionPill").textContent = activeSession.label;
-    document.getElementById("receptionTime").innerHTML = activeSession.time;
-    document.getElementById("sessionNote").textContent = activeSession.note;
-    document.getElementById("receptionIntro").textContent = activeSession.intro;
+    const sessionPill = document.getElementById("sessionPill");
+    const receptionTime = document.getElementById("receptionTime");
+    const sessionNote = document.getElementById("sessionNote");
+    const receptionIntro = document.getElementById("receptionIntro");
+
+    if (sessionPill) {
+      sessionPill.textContent = activeSession.label;
+    }
+
+    if (receptionTime) {
+      receptionTime.innerHTML = activeSession.time;
+    }
+
+    if (sessionNote) {
+      sessionNote.textContent = activeSession.note;
+    }
+
+    if (receptionIntro) {
+      receptionIntro.textContent = activeSession.intro;
+    }
 
     if (guest) {
       const cleanGuestName = guest.replace(/\+/g, " ").trim();
       document.getElementById("guestName").textContent = cleanGuestName || "Bapak/Ibu/Saudara/i";
-      const nameField = document.getElementById("name");
-      nameField.value = cleanGuestName;
+      const guestbookNameField = document.getElementById("guestbookName");
+      if (guestbookNameField) {
+        guestbookNameField.value = cleanGuestName;
+      }
     }
-
-    document.getElementById("rsvpForm").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const form = new FormData(event.currentTarget);
-      const summary = [
-        "Halo, saya ingin konfirmasi kehadiran untuk undangan Winda & Arif.",
-        "",
-        "Nama: " + form.get("name"),
-        "Sesi: " + activeSession.label,
-        "Kehadiran: " + form.get("attendance"),
-        "Jumlah tamu: " + form.get("guestCount"),
-        "Ucapan: " + (form.get("message") || "-")
-      ].join("\n");
-      const whatsappUrl = "https://wa.me/6289688225295?text=" + encodeURIComponent(summary);
-      window.open(whatsappUrl, "_blank");
-      event.currentTarget.reset();
-    });
 
     const wishForm = document.getElementById("wishForm");
     const wishItems = document.getElementById("wishItems");
     const wishStatus = document.getElementById("wishStatus");
-    const wishSubmitButton = wishForm.querySelector('button[type="submit"]');
+    const wishSubmitButton = wishForm ? wishForm.querySelector('button[type="submit"]') : null;
+    const guestbookForm = document.getElementById("guestbookForm");
+    const guestbookItems = document.getElementById("guestbookItems");
+    const guestbookCount = document.getElementById("guestbookCount");
+    const guestbookStatus = document.getElementById("guestbookStatus");
+    const guestbookSubmitButton = guestbookForm ? guestbookForm.querySelector('button[type="submit"]') : null;
 
     function renderWishItem(wish) {
       const item = document.createElement("div");
@@ -279,6 +283,20 @@
 
       const title = document.createElement("strong");
       title.textContent = wish.name;
+
+      if (wish.attendance_status === "Hadir") {
+        const badge = document.createElement("span");
+        badge.className = "attendance-badge attendance-badge-present";
+        badge.setAttribute("aria-label", "Hadir");
+        badge.title = "Hadir";
+        title.appendChild(badge);
+      } else if (wish.attendance_status === "Tidak Hadir") {
+        const badge = document.createElement("span");
+        badge.className = "attendance-badge attendance-badge-absent";
+        badge.setAttribute("aria-label", "Tidak Hadir");
+        badge.title = "Tidak Hadir";
+        title.appendChild(badge);
+      }
 
       const body = document.createElement("p");
       body.textContent = wish.message;
@@ -288,21 +306,60 @@
     }
 
     function setWishStatus(message) {
+      if (!wishStatus) {
+        return;
+      }
+
       wishStatus.textContent = message;
       wishStatus.hidden = !message;
+    }
+
+    function setGuestbookStatus(message) {
+      if (!guestbookStatus) {
+        return;
+      }
+
+      guestbookStatus.textContent = message;
+      guestbookStatus.hidden = !message;
+    }
+
+    function renderWishCollections(wishes) {
+      if (wishItems) {
+        wishItems.innerHTML = "";
+      }
+
+      if (guestbookItems) {
+        guestbookItems.innerHTML = "";
+      }
+
+      if (guestbookCount) {
+        guestbookCount.textContent = `${wishes.length} Ucapan`;
+      }
+
+      wishes.forEach((wish) => {
+        if (wishItems) {
+          wishItems.appendChild(renderWishItem(wish));
+        }
+
+        if (guestbookItems) {
+          guestbookItems.appendChild(renderWishItem(wish));
+        }
+      });
     }
 
     async function fetchWishes() {
       if (!wishesEnabled) {
         setWishStatus("Ucapan akan tampil di sini setelah Supabase dihubungkan.");
+        setGuestbookStatus("Ucapan akan tampil setelah Supabase dihubungkan.");
         return;
       }
 
       setWishStatus("Memuat ucapan tamu...");
+      setGuestbookStatus("Memuat ucapan tamu...");
 
       try {
-        const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
+        let response = await fetch(
+          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,attendance_status,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -312,82 +369,157 @@
         );
 
         if (!response.ok) {
+          response = await fetch(
+            `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
+            {
+              headers: {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+              }
+            }
+          );
+        }
+
+        if (!response.ok) {
           throw new Error("Gagal memuat ucapan dari Supabase.");
         }
 
         const wishes = await response.json();
-        wishItems.innerHTML = "";
+        renderWishCollections(wishes);
 
         if (!wishes.length) {
           setWishStatus("Belum ada ucapan. Jadilah yang pertama mengirim doa terbaik.");
+          setGuestbookStatus("Belum ada ucapan. Jadilah yang pertama mengirim doa terbaik.");
           return;
         }
 
-        wishes.forEach((wish) => {
-          wishItems.appendChild(renderWishItem(wish));
-        });
         setWishStatus("");
+        setGuestbookStatus("");
       } catch (error) {
         console.error(error);
         setWishStatus("Ucapan belum bisa dimuat. Periksa konfigurasi Supabase Anda.");
+        setGuestbookStatus("Ucapan belum bisa dimuat. Periksa konfigurasi Supabase Anda.");
       }
     }
 
-    wishForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    if (wishForm && wishSubmitButton) {
+      wishForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-      const wishName = document.getElementById("wishName").value.trim();
-      const wishText = document.getElementById("wishText").value.trim();
-      const wishWebsite = document.getElementById("wishWebsite").value.trim();
+        const wishName = document.getElementById("wishName").value.trim();
+        const wishText = document.getElementById("wishText").value.trim();
+        const wishWebsite = document.getElementById("wishWebsite").value.trim();
 
-      if (!wishName || !wishText) {
-        setWishStatus("Nama dan ucapan wajib diisi.");
-        return;
-      }
-
-      if (wishWebsite) {
-        wishForm.reset();
-        setWishStatus("Ucapan diterima. Terima kasih atas doa terbaiknya.");
-        return;
-      }
-
-      if (!wishesEnabled) {
-        setWishStatus("Isi konfigurasi Supabase terlebih dahulu untuk mengaktifkan ucapan tamu.");
-        return;
-      }
-
-      wishSubmitButton.disabled = true;
-      setWishStatus("Mengirim ucapan...");
-
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "return=minimal"
-          },
-          body: JSON.stringify({
-            name: wishName,
-            message: wishText
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error("Gagal menyimpan ucapan ke Supabase.");
+        if (!wishName || !wishText) {
+          setWishStatus("Nama dan ucapan wajib diisi.");
+          return;
         }
 
-        wishForm.reset();
-        await fetchWishes();
-        setWishStatus("Ucapan berhasil dikirim dan akan tampil setelah disetujui.");
-      } catch (error) {
-        console.error(error);
-        setWishStatus("Ucapan belum berhasil dikirim. Coba lagi beberapa saat lagi.");
-      } finally {
-        wishSubmitButton.disabled = false;
-      }
-    });
+        if (wishWebsite) {
+          wishForm.reset();
+          setWishStatus("Ucapan diterima. Terima kasih atas doa terbaiknya.");
+          return;
+        }
+
+        if (!wishesEnabled) {
+          setWishStatus("Isi konfigurasi Supabase terlebih dahulu untuk mengaktifkan ucapan tamu.");
+          return;
+        }
+
+        wishSubmitButton.disabled = true;
+        setWishStatus("Mengirim ucapan...");
+
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "return=minimal"
+            },
+            body: JSON.stringify({
+              name: wishName,
+              message: wishText
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("Gagal menyimpan ucapan ke Supabase.");
+          }
+
+          wishForm.reset();
+          await fetchWishes();
+          setWishStatus("Ucapan berhasil dikirim dan akan tampil setelah disetujui.");
+        } catch (error) {
+          console.error(error);
+          setWishStatus("Ucapan belum berhasil dikirim. Coba lagi beberapa saat lagi.");
+        } finally {
+          wishSubmitButton.disabled = false;
+        }
+      });
+    }
+
+    if (guestbookForm && guestbookSubmitButton) {
+      guestbookForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const form = new FormData(event.currentTarget);
+        const guestbookName = String(form.get("name") || "").trim();
+        const guestbookMessage = String(form.get("message") || "").trim();
+        const attendanceStatus = String(form.get("attendance_status") || "").trim();
+        const guestbookWebsite = String(form.get("website") || "").trim();
+
+        if (!guestbookName || !guestbookMessage || !attendanceStatus) {
+          setGuestbookStatus("Nama, konfirmasi kehadiran, dan ucapan wajib diisi.");
+          return;
+        }
+
+        if (guestbookWebsite) {
+          guestbookForm.reset();
+          setGuestbookStatus("Ucapan diterima. Terima kasih atas doa terbaiknya.");
+          return;
+        }
+
+        if (!wishesEnabled) {
+          setGuestbookStatus("Isi konfigurasi Supabase terlebih dahulu untuk mengaktifkan ucapan tamu.");
+          return;
+        }
+
+        guestbookSubmitButton.disabled = true;
+        setGuestbookStatus("Mengirim konfirmasi dan ucapan...");
+
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "return=minimal"
+            },
+            body: JSON.stringify({
+              name: guestbookName,
+              message: guestbookMessage,
+              attendance_status: attendanceStatus
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("Gagal menyimpan konfirmasi ke Supabase.");
+          }
+
+          guestbookForm.reset();
+          await fetchWishes();
+          setGuestbookStatus("Konfirmasi dan ucapan berhasil dikirim. Ucapan akan tampil setelah disetujui.");
+        } catch (error) {
+          console.error(error);
+          setGuestbookStatus("Konfirmasi belum berhasil dikirim. Coba lagi beberapa saat lagi.");
+        } finally {
+          guestbookSubmitButton.disabled = false;
+        }
+      });
+    }
 
     const galleryItems = Array.from(document.querySelectorAll(".gallery-grid .gallery-item img"));
     const lightbox = document.getElementById("galleryLightbox");
