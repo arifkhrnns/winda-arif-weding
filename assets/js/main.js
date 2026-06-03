@@ -89,13 +89,17 @@
 
     const overlay = document.getElementById("invitationCover");
     const openButton = document.getElementById("openInvitation");
+    const openingSection = document.getElementById("openingVideoSection");
+    const openingVideo = document.getElementById("openingVideo");
     const body = document.body;
     const bgMusic = document.getElementById("bgMusic");
     const audioToggle = document.getElementById("audioToggle");
     const experienceScroll = document.querySelector(".experience-scroll");
     const storyTimeline = document.querySelector(".story-grid");
     const desktopExperienceQuery = window.matchMedia("(min-width: 821px)");
+    const openingNameTime = 10;
     let invitationOpened = false;
+    let openingFinished = false;
     let userPausedAudio = false;
     let autoPausedAudio = false;
 
@@ -151,13 +155,78 @@
       }
     }
 
-    openButton.addEventListener("click", async () => {
+    async function openInvitationContent(options = {}) {
+      const { playMusic = true } = options;
+
       overlay.classList.add("is-hidden");
       body.classList.remove("locked");
       invitationOpened = true;
       userPausedAudio = false;
       autoPausedAudio = false;
-      await playAudio();
+      updateStoryProgress();
+
+      if (playMusic) {
+        await playAudio();
+      }
+    }
+
+    function handleOpeningVideoTime() {
+      if (openingVideo.currentTime >= openingNameTime) {
+        openingSection.classList.add("show-names");
+      }
+    }
+
+    async function finishOpeningVideo() {
+      if (openingFinished) {
+        return;
+      }
+
+      openingFinished = true;
+      openingVideo.pause();
+      openingVideo.removeEventListener("timeupdate", handleOpeningVideoTime);
+      openingSection.classList.remove("is-active");
+      openingSection.classList.add("is-ended", "show-names");
+
+      if (!userPausedAudio && bgMusic.paused) {
+        await playAudio();
+      }
+    }
+
+    async function playOpeningVideo() {
+      await openInvitationContent();
+
+      if (!openingSection || !openingVideo) {
+        return;
+      }
+
+      openingFinished = false;
+      openingSection.classList.remove("is-ended", "show-names");
+      openingSection.classList.add("is-active");
+      openingVideo.loop = false;
+      openingVideo.muted = false;
+      try {
+        openingVideo.currentTime = 0;
+      } catch (error) {
+        openingVideo.load();
+      }
+      openingVideo.addEventListener("timeupdate", handleOpeningVideoTime);
+      openingVideo.addEventListener("ended", finishOpeningVideo, { once: true });
+      openingVideo.addEventListener("error", finishOpeningVideo, { once: true });
+
+      try {
+        await openingVideo.play();
+      } catch (error) {
+        try {
+          openingVideo.muted = true;
+          await openingVideo.play();
+        } catch (fallbackError) {
+          await finishOpeningVideo();
+        }
+      }
+    }
+
+    openButton.addEventListener("click", () => {
+      playOpeningVideo();
     });
 
     audioToggle.addEventListener("click", async () => {
@@ -237,14 +306,14 @@
     const session = params.get("sesi");
     const activeSession = sessionConfig[session] || sessionConfig["1"];
 
-    const sessionPill = document.getElementById("sessionPill");
+    const sessionPills = document.querySelectorAll("[data-session-pill]");
     const receptionTime = document.getElementById("receptionTime");
     const sessionNote = document.getElementById("sessionNote");
     const receptionIntro = document.getElementById("receptionIntro");
 
-    if (sessionPill) {
-      sessionPill.textContent = activeSession.label;
-    }
+    sessionPills.forEach((pill) => {
+      pill.textContent = activeSession.label;
+    });
 
     if (receptionTime) {
       receptionTime.innerHTML = activeSession.time;
@@ -266,6 +335,86 @@
         guestbookNameField.value = cleanGuestName;
       }
     }
+
+    const giftCards = document.querySelectorAll("[data-gift-card]");
+    const giftCopyButtons = document.querySelectorAll(".gift-copy");
+    const copyToast = document.getElementById("copyToast");
+    let copyToastTimer;
+
+    function showCopyToast(message) {
+      if (!copyToast) {
+        return;
+      }
+
+      copyToast.textContent = message;
+      copyToast.classList.add("is-visible");
+      window.clearTimeout(copyToastTimer);
+      copyToastTimer = window.setTimeout(() => {
+        copyToast.classList.remove("is-visible");
+      }, 1800);
+    }
+
+    function copyTextFallback(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      tempInput.setAttribute("readonly", "");
+      tempInput.style.position = "fixed";
+      tempInput.style.left = "-9999px";
+      document.body.appendChild(tempInput);
+      tempInput.focus();
+      tempInput.select();
+      tempInput.setSelectionRange(0, text.length);
+
+      try {
+        return document.execCommand("copy");
+      } catch (error) {
+        return false;
+      } finally {
+        tempInput.remove();
+      }
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (error) {
+          return copyTextFallback(text);
+        }
+      }
+
+      return copyTextFallback(text);
+    }
+
+    giftCards.forEach((card) => {
+      const trigger = card.querySelector(".gift-card__trigger");
+      const details = card.querySelector(".gift-card__details");
+
+      if (!trigger || !details) {
+        return;
+      }
+
+      trigger.addEventListener("click", () => {
+        const shouldOpen = !card.classList.contains("is-open");
+        card.classList.toggle("is-open", shouldOpen);
+        details.hidden = !shouldOpen;
+        trigger.setAttribute("aria-expanded", String(shouldOpen));
+      });
+    });
+
+    giftCopyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const copyValue = button.dataset.copyText || "";
+
+        try {
+          const copied = await copyText(copyValue);
+          showCopyToast(copied ? "Nomor berhasil disalin" : "Nomor belum berhasil disalin");
+        } catch (error) {
+          showCopyToast("Nomor belum berhasil disalin");
+        }
+      });
+    });
 
     const wishForm = document.getElementById("wishForm");
     const wishItems = document.getElementById("wishItems");

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260602-order-fix" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260603-session-pill" />
 </head>
 <body class="locked">
   <div class="overlay" id="invitationCover">
@@ -22,6 +22,7 @@
         <span class="guest-label">Kepada Yth.</span>
         <div class="guest-name" id="guestName">Bapak/Ibu/Saudara/i</div>
       </div>
+      <div class="session-pill session-pill--cover" data-session-pill>Resepsi Sesi 1</div>
       <button class="btn btn-primary" id="openInvitation">Buka Undangan</button>
     </div>
   </div>
@@ -43,58 +44,37 @@
 
     <div class="experience-panel">
       <div class="experience-scroll">
-        <header class="hero">
-          <div class="container hero-grid">
-            <div class="hero-copy reveal">
-              <div class="eyebrow">Simpan Tanggal</div>
-              <div class="display">Winda<br />&amp; Arif</div>
-              <p class="subhead">Minggu, 5 Juli 2026. Merayakan kisah yang tumbuh dari pertemanan, lalu berlabuh dalam satu janji seumur hidup.</p>
-              <div class="hero-date">05 . 07 . 2026 | Bekasi</div>
-              <div class="session-pill" id="sessionPill">Resepsi Sesi 1</div>
-            </div>
-
-            <div class="hero-card reveal">
-              <div class="hero-photo"></div>
-              <div class="hero-card-content">
-                <strong>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</strong>
-                <span>QS. Ar-Rum: 21</span>
-              </div>
-            </div>
+        <section class="opening-video" id="openingVideoSection">
+          <video id="openingVideo" class="opening-video__media" preload="auto" playsinline>
+            <source src="assets/videos/opening-islamic-3.mp4" type="video/mp4" />
+          </video>
+          <div class="opening-video__shade" aria-hidden="true"></div>
+          <div class="opening-video__names" id="openingNameLayer">
+            <span>The Wedding of</span>
+            <strong>Winda &amp; Arif</strong>
+            <small>05 . 07 . 2026</small>
           </div>
-        </header>
-
-        <div class="container">
-          <section class="quote-box glass-card reveal">
-            <p>Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada momen sakral pernikahan kami.</p>
-            <span class="verse">Undangan Pernikahan</span>
-          </section>
-        </div>
+        </section>
 
         <main>
-    <section class="section" id="countdown">
-      <div class="ornament"></div>
-      <div class="container">
-        <div class="section-title reveal">
-          <div class="eyebrow">Menuju Hari Bahagia</div>
-          <h2>Hitung Mundur Acara</h2>
-          <p>Waktu terus berjalan, dan kami menantikan momen berharga ini bersama orang-orang yang kami sayangi.</p>
-        </div>
-        <div class="countdown-grid">
-          <article class="count-card reveal"><strong id="days">00</strong><span>Hari</span></article>
-          <article class="count-card reveal"><strong id="hours">00</strong><span>Jam</span></article>
-          <article class="count-card reveal"><strong id="minutes">00</strong><span>Menit</span></article>
-          <article class="count-card reveal"><strong id="seconds">00</strong><span>Detik</span></article>
-        </div>
-        <div class="countdown-actions reveal">
-          <button class="btn btn-secondary calendar-btn" id="saveCalendar" type="button">
-            <svg class="calendar-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1H6Z" />
-            </svg>
-            <span>Simpan ke Kalender</span>
-          </button>
-        </div>
-      </div>
-    </section>
+          <section class="ar-rum-section" id="arRumQuote">
+            <div class="container">
+              <div class="hero-card hero-card--ar-rum reveal">
+                <div class="hero-photo"></div>
+                <div class="hero-card-content">
+                  <strong>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</strong>
+                  <span>QS. Ar-Rum: 21</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="container">
+              <section class="quote-box glass-card reveal">
+                <p>Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada momen sakral pernikahan kami.</p>
+                <span class="verse">Undangan Pernikahan</span>
+              </section>
+            </div>
+          </section>
 
     <section class="section" id="mempelai">
       <div class="container">
@@ -136,6 +116,31 @@
       </div>
     </section>
 
+    <section class="section" id="countdown">
+      <div class="ornament"></div>
+      <div class="container">
+        <div class="section-title reveal">
+          <div class="eyebrow">Menuju Hari Bahagia</div>
+          <h2>Hitung Mundur Acara</h2>
+          <p>Waktu terus berjalan, dan kami menantikan momen berharga ini bersama orang-orang yang kami sayangi.</p>
+        </div>
+        <div class="countdown-grid">
+          <article class="count-card reveal"><strong id="days">00</strong><span>Hari</span></article>
+          <article class="count-card reveal"><strong id="hours">00</strong><span>Jam</span></article>
+          <article class="count-card reveal"><strong id="minutes">00</strong><span>Menit</span></article>
+          <article class="count-card reveal"><strong id="seconds">00</strong><span>Detik</span></article>
+        </div>
+        <div class="countdown-actions reveal">
+          <button class="btn btn-secondary calendar-btn" id="saveCalendar" type="button">
+            <svg class="calendar-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8ZM6 6a1 1 0 0 0-1 1v1h14V7a1 1 0 0 0-1-1H6Z" />
+            </svg>
+            <span>Simpan ke Kalender</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="acara">
       <div class="container">
         <div class="section-title reveal">
@@ -163,6 +168,7 @@
 
           <article class="schedule-card schedule-card-reception glass-card reveal">
             <h3>Resepsi</h3>
+            <div class="session-pill session-pill--schedule" data-session-pill>Resepsi Sesi 1</div>
             <p id="receptionIntro">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</p>
             <div class="meta-list">
               <div class="meta-item">
@@ -174,6 +180,7 @@
                 <p>Gedung Serbaguna Ath Thoyyibah</p>
               </div>
             </div>
+            <p class="session-note" id="sessionNote">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</p>
             <a class="schedule-map-link" href="https://www.google.com/maps/search/?api=1&query=Gedung%20Serbaguna%20Ath%20Thoyyibah" target="_blank" rel="noopener noreferrer">Google Map</a>
             
           </article>
@@ -247,26 +254,36 @@
 
     <section class="section" id="gift">
       <div class="container">
-        <div class="section-title reveal">
-          <div class="eyebrow">Hadiah Pernikahan</div>
-          <h2>Amplop Digital</h2>
-          <p>Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun apabila ingin berbagi tanda kasih, dapat disampaikan melalui informasi berikut.</p>
-        </div>
 
-        <div class="gift-grid">
-          <article class="gift-card glass-card reveal">
-            <h3>Transfer Bank</h3>
-            <p>Bank Central Asia (BCA)</p>
-            <div class="account">5776665165</div>
-            <p>a.n. M. Arif Khairunas</p>
-          </article>
-          <article class="gift-card glass-card reveal">
-            <h3>E-Wallet</h3>
-            <p>DANA</p>
-            <div class="account">0812-9960-1061</div>
-            <p>a.n. Winda Widiyanti</p>
+        <div class="gift-grid gift-grid--single">
+          <article class="gift-card gift-card--interactive gift-card--single glass-card reveal" data-gift-card>
+            <button class="gift-card__trigger" type="button" aria-expanded="false">
+              <div class="eyebrow">Hadiah Pernikahan</div>
+              <h2>Amplop Digital</h2>
+              <p>Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun apabila ingin berbagi tanda kasih, dapat disampaikan melalui informasi berikut.</p>
+              <span class="gift-card__hint">Klik untuk melihat rekening tujuan</span>
+            </button>
+            <div class="gift-card__details" hidden>
+              <div class="gift-account">
+                <div class="gift-account__meta">
+                  <span>Bank Central Asia</span>
+                  <p>a.n. M. Arif Khairunas</p>
+                </div>
+                <div class="account">5776665165</div>
+                <button class="btn btn-secondary gift-copy" type="button" data-copy-text="5776665165">Salin Nomor BCA</button>
+              </div>
+              <div class="gift-account">
+                <div class="gift-account__meta">
+                  <span>DANA</span>
+                  <p>a.n. Winda Widiyanti</p>
+                </div>
+                <div class="account">0812-9960-1061</div>
+                <button class="btn btn-secondary gift-copy" type="button" data-copy-text="081299601061">Salin Nomor DANA</button>
+              </div>
+            </div>
           </article>
         </div>
+        <div class="copy-toast" id="copyToast" role="status" aria-live="polite">Nomor berhasil disalin</div>
       </div>
     </section>
 
@@ -343,6 +360,6 @@
     <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Foto berikutnya">&#10095;</button>
   </div>
 
-  <script src="assets/js/main.js?v=20260602-order-fix"></script>
+  <script src="assets/js/main.js?v=20260603-session-pill"></script>
 </body>
 </html>
