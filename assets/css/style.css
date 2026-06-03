@@ -23,14 +23,28 @@
       font-family: "Plus Jakarta Sans", sans-serif;
       color: var(--ink);
       background-color: #f8f1e7;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+
+    .site-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
       background-image:
         linear-gradient(180deg, rgba(251, 247, 242, 0.72), rgba(245, 237, 225, 0.82)),
         url("../images/bg-img.png");
       background-position: center, center;
       background-size: auto, cover;
       background-repeat: no-repeat, no-repeat;
-      background-attachment: fixed, fixed;
-      overflow-x: hidden;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .experience-layout {
+      position: relative;
+      z-index: 1;
     }
 
     body.locked,
@@ -1720,7 +1734,7 @@
     }
 
     @media (max-width: 720px) {
-      body {
+      .site-background {
         background-size: auto, auto 112svh;
       }
 
@@ -1809,13 +1823,12 @@
       body {
         overflow: hidden;
         background-color: #f8f1e7;
+      }
+
+      .site-background {
         background-image:
           linear-gradient(180deg, rgba(248, 241, 231, 0.62), rgba(239, 228, 212, 0.76)),
           url("../images/bg-img.png");
-        background-position: center, center;
-        background-size: auto, cover;
-        background-repeat: no-repeat, no-repeat;
-        background-attachment: fixed, fixed;
       }
 
       .experience-layout {
