@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260603-replay-reveal" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260603-gallery-center" />
 </head>
 <body class="locked">
   <div class="site-background" aria-hidden="true"></div>
@@ -24,7 +24,7 @@
         <span class="guest-label">Kepada Yth.</span>
         <div class="guest-name" id="guestName">Bapak/Ibu/Saudara/i</div>
       </div>
-      <div class="session-pill session-pill--cover" data-session-pill>Resepsi Sesi 1</div>
+      <div class="session-pill session-pill--cover" data-session-pill>11.00 - 13.00 WIB</div>
       <button class="btn btn-primary" id="openInvitation">Buka Undangan</button>
     </div>
   </div>
@@ -170,8 +170,7 @@
 
           <article class="schedule-card schedule-card-reception glass-card reveal">
             <h3>Resepsi</h3>
-            <div class="session-pill session-pill--schedule" data-session-pill>Resepsi Sesi 1</div>
-            <p id="receptionIntro">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</p>
+            <p id="receptionIntro">Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih.</p>
             <div class="meta-list">
               <div class="meta-item">
                 <strong>Tanggal &amp; Waktu</strong>
@@ -182,7 +181,7 @@
                 <p>Gedung Serbaguna Ath Thoyyibah</p>
               </div>
             </div>
-            <p class="session-note" id="sessionNote">Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.</p>
+            <p class="session-note" id="sessionNote">Mohon hadir sesuai waktu yang tertera pada undangan.</p>
             <a class="schedule-map-link" href="https://www.google.com/maps/search/?api=1&query=Gedung%20Serbaguna%20Ath%20Thoyyibah" target="_blank" rel="noopener noreferrer">Google Map</a>
             
           </article>
@@ -231,25 +230,33 @@
           <p>Setiap potret adalah bagian dari perjalanan kami, yang mengantar dua hati ini menuju satu janji suci.</p>
         </div>
 
-        <div class="gallery-grid">
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-01.jpg" alt="Galeri Winda dan Arif 1" loading="lazy" /></figure>
-          <figure class="gallery-item featured reveal"><img src="./assets/images/gallery-02.jpg" alt="Galeri Winda dan Arif 2" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-03.jpg" alt="Galeri Winda dan Arif 3" loading="lazy" /></figure>
-          <figure class="gallery-item portrait featured reveal"><img src="./assets/images/gallery-04.jpg" alt="Galeri Winda dan Arif 4" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-05.jpg" alt="Galeri Winda dan Arif 5" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-06.jpg" alt="Galeri Winda dan Arif 6" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-07.jpg" alt="Galeri Winda dan Arif 7" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-08.jpg" alt="Galeri Winda dan Arif 8" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-18.jpg" alt="Galeri Winda dan Arif 18" loading="lazy" /></figure>
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-09.jpg" alt="Galeri Winda dan Arif 9" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-10.jpg" alt="Galeri Winda dan Arif 10" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-11.jpg" alt="Galeri Winda dan Arif 11" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-12.jpg" alt="Galeri Winda dan Arif 12" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-13.jpg" alt="Galeri Winda dan Arif 13" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-14.jpg" alt="Galeri Winda dan Arif 14" loading="lazy" /></figure>
-          <figure class="gallery-item portrait reveal"><img src="./assets/images/gallery-15.jpg" alt="Galeri Winda dan Arif 15" loading="lazy" /></figure>
-          <figure class="gallery-item landscape reveal"><img src="./assets/images/gallery-16.jpg" alt="Galeri Winda dan Arif 16" loading="lazy" /></figure>
-          <figure class="gallery-item portrait tall reveal"><img src="./assets/images/gallery-17.jpg" alt="Galeri Winda dan Arif 17" loading="lazy" /></figure>
+        <div class="gallery-showcase reveal" data-gallery>
+          <button class="gallery-main" type="button" data-gallery-open aria-label="Buka foto galeri yang sedang dipilih">
+            <img id="galleryMainImage" src="./assets/images/gallery-02.jpg" alt="Galeri Winda dan Arif 2" data-gallery-main loading="eager" />
+          </button>
+
+          <div class="gallery-strip-wrap">
+            <div class="gallery-strip" data-gallery-strip role="listbox" aria-label="Pilih foto galeri">
+              <button class="gallery-thumb landscape is-active" type="button" data-gallery-thumb role="option" aria-selected="true" aria-label="Tampilkan foto galeri 2"><img src="./assets/images/gallery-02.jpg" alt="Galeri Winda dan Arif 2" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 1"><img src="./assets/images/gallery-01.jpg" alt="Galeri Winda dan Arif 1" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 3"><img src="./assets/images/gallery-03.jpg" alt="Galeri Winda dan Arif 3" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 4"><img src="./assets/images/gallery-04.jpg" alt="Galeri Winda dan Arif 4" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 5"><img src="./assets/images/gallery-05.jpg" alt="Galeri Winda dan Arif 5" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 6"><img src="./assets/images/gallery-06.jpg" alt="Galeri Winda dan Arif 6" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 7"><img src="./assets/images/gallery-07.jpg" alt="Galeri Winda dan Arif 7" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 8"><img src="./assets/images/gallery-08.jpg" alt="Galeri Winda dan Arif 8" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 18"><img src="./assets/images/gallery-18.jpg" alt="Galeri Winda dan Arif 18" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 9"><img src="./assets/images/gallery-09.jpg" alt="Galeri Winda dan Arif 9" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 10"><img src="./assets/images/gallery-10.jpg" alt="Galeri Winda dan Arif 10" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 11"><img src="./assets/images/gallery-11.jpg" alt="Galeri Winda dan Arif 11" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 12"><img src="./assets/images/gallery-12.jpg" alt="Galeri Winda dan Arif 12" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 13"><img src="./assets/images/gallery-13.jpg" alt="Galeri Winda dan Arif 13" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 14"><img src="./assets/images/gallery-14.jpg" alt="Galeri Winda dan Arif 14" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 15"><img src="./assets/images/gallery-15.jpg" alt="Galeri Winda dan Arif 15" loading="lazy" /></button>
+              <button class="gallery-thumb landscape" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 16"><img src="./assets/images/gallery-16.jpg" alt="Galeri Winda dan Arif 16" loading="lazy" /></button>
+              <button class="gallery-thumb portrait" type="button" data-gallery-thumb role="option" aria-selected="false" aria-label="Tampilkan foto galeri 17"><img src="./assets/images/gallery-17.jpg" alt="Galeri Winda dan Arif 17" loading="lazy" /></button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -362,6 +369,6 @@
     <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Foto berikutnya">&#10095;</button>
   </div>
 
-  <script src="assets/js/main.js?v=20260603-replay-reveal"></script>
+  <script src="assets/js/main.js?v=20260603-gallery-center"></script>
 </body>
 </html>

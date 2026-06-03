@@ -50,7 +50,7 @@
         `DTSTART:${formatIcsDate(startDate)}`,
         `DTEND:${formatIcsDate(endDate)}`,
         "SUMMARY:Winda & Arif Wedding Day",
-        "DESCRIPTION:Akad Nikah pukul 08.00 WIB dan resepsi sesuai sesi undangan Anda.",
+        "DESCRIPTION:Akad Nikah pukul 08.00 WIB dan resepsi sesuai waktu yang tertera pada undangan Anda.",
         "LOCATION:Gedung Serbaguna Ath Thoyyibah, Bekasi",
         "END:VEVENT",
         "END:VCALENDAR"
@@ -296,16 +296,16 @@
 
     const sessionConfig = {
       "1": {
-        label: "Resepsi Sesi 1",
+        label: "11.00 - 13.00 WIB",
         time: "Minggu, 5 Juli 2026<br />11.00 WIB - 13.00 WIB",
-        note: "Undangan ini berlaku untuk resepsi sesi 1. Mohon hadir sesuai sesi yang tertera pada undangan.",
-        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih pada sesi pertama resepsi kami."
+        note: "Mohon hadir sesuai waktu yang tertera pada undangan.",
+        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
       },
       "2": {
-        label: "Resepsi Sesi 2",
+        label: "13.30 - 15.30 WIB",
         time: "Minggu, 5 Juli 2026<br />13.30 WIB - 15.30 WIB",
-        note: "Undangan ini berlaku untuk resepsi sesi 2. Mohon hadir sesuai sesi yang tertera pada undangan.",
-        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih pada sesi kedua resepsi kami."
+        note: "Mohon hadir sesuai waktu yang tertera pada undangan.",
+        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
       }
     };
 
@@ -678,25 +678,129 @@
       });
     }
 
-    const galleryItems = Array.from(document.querySelectorAll(".gallery-grid .gallery-item img"));
+    const galleryThumbs = Array.from(document.querySelectorAll("[data-gallery-thumb]"));
+    const galleryItems = galleryThumbs
+      .map((thumb) => thumb.querySelector("img"))
+      .filter(Boolean);
+    const galleryMain = document.querySelector("[data-gallery-open]");
+    const galleryMainImage = document.querySelector("[data-gallery-main]");
+    const galleryStrip = document.querySelector("[data-gallery-strip]");
     const lightbox = document.getElementById("galleryLightbox");
     const lightboxImage = document.getElementById("lightboxImage");
     const lightboxCounter = document.getElementById("lightboxCounter");
     const lightboxClose = document.getElementById("lightboxClose");
     const lightboxPrev = document.getElementById("lightboxPrev");
     const lightboxNext = document.getElementById("lightboxNext");
-    let activeGalleryIndex = 0;
+    let activeGalleryIndex = Math.max(
+      0,
+      galleryThumbs.findIndex((thumb) => thumb.classList.contains("is-active"))
+    );
+    let galleryScrollFrame = 0;
+    let isDraggingGallery = false;
+    let hasDraggedGallery = false;
+    let galleryDragStartX = 0;
+    let galleryDragStartScrollLeft = 0;
 
-    function renderLightbox(index) {
+    function updateGalleryMain(index, options = {}) {
+      if (!galleryItems.length || !galleryMainImage) {
+        return;
+      }
+
       const total = galleryItems.length;
       activeGalleryIndex = (index + total) % total;
+      const activeImage = galleryItems[activeGalleryIndex];
+      const activeThumb = galleryThumbs[activeGalleryIndex];
+      const activeSrc = activeImage.currentSrc || activeImage.src;
+
+      if (galleryMain && options.animate !== false) {
+        galleryMain.classList.add("is-switching");
+      }
+
+      galleryMainImage.src = activeSrc;
+      galleryMainImage.alt = activeImage.alt;
+
+      if (galleryMain) {
+        galleryMain.style.setProperty("--gallery-active-bg", `url("${activeSrc}")`);
+      }
+
+      galleryThumbs.forEach((thumb, thumbIndex) => {
+        const isActive = thumbIndex === activeGalleryIndex;
+        thumb.classList.toggle("is-active", isActive);
+        thumb.setAttribute("aria-selected", String(isActive));
+      });
+
+      if (activeThumb && options.scroll !== false) {
+        activeThumb.scrollIntoView({
+          block: "nearest",
+          inline: "center",
+          behavior: options.scrollBehavior || "smooth"
+        });
+      }
+
+      if (galleryMain && options.animate !== false) {
+        window.setTimeout(() => galleryMain.classList.remove("is-switching"), 120);
+      }
+    }
+
+    function getCenteredGalleryIndex() {
+      if (!galleryStrip || !galleryThumbs.length) {
+        return activeGalleryIndex;
+      }
+
+      const stripRect = galleryStrip.getBoundingClientRect();
+      const stripCenter = stripRect.left + stripRect.width / 2;
+      let centeredIndex = activeGalleryIndex;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      galleryThumbs.forEach((thumb, index) => {
+        const thumbRect = thumb.getBoundingClientRect();
+        const thumbCenter = thumbRect.left + thumbRect.width / 2;
+        const distance = Math.abs(stripCenter - thumbCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          centeredIndex = index;
+        }
+      });
+
+      return centeredIndex;
+    }
+
+    function syncGalleryMainToCenter() {
+      galleryScrollFrame = 0;
+      const centeredIndex = getCenteredGalleryIndex();
+
+      if (centeredIndex !== activeGalleryIndex) {
+        updateGalleryMain(centeredIndex, { animate: false, scroll: false });
+      }
+    }
+
+    function requestGalleryCenterSync() {
+      if (galleryScrollFrame) {
+        return;
+      }
+
+      galleryScrollFrame = window.requestAnimationFrame(syncGalleryMainToCenter);
+    }
+
+    function renderLightbox(index) {
+      if (!galleryItems.length || !lightboxImage || !lightboxCounter) {
+        return;
+      }
+
+      const total = galleryItems.length;
+      updateGalleryMain(index, { animate: false });
       const activeImage = galleryItems[activeGalleryIndex];
       lightboxImage.src = activeImage.src;
       lightboxImage.alt = activeImage.alt;
       lightboxCounter.textContent = `${activeGalleryIndex + 1} / ${total}`;
     }
 
-    function openLightbox(index) {
+    function openLightbox(index = activeGalleryIndex) {
+      if (!lightbox || !galleryItems.length) {
+        return;
+      }
+
       renderLightbox(index);
       lightbox.classList.add("is-open");
       lightbox.setAttribute("aria-hidden", "false");
@@ -704,27 +808,114 @@
     }
 
     function closeLightbox() {
+      if (!lightbox || !lightboxImage) {
+        return;
+      }
+
       lightbox.classList.remove("is-open");
       lightbox.setAttribute("aria-hidden", "true");
       document.body.classList.remove("viewer-open");
       lightboxImage.src = "";
     }
 
-    galleryItems.forEach((image, index) => {
-      image.closest(".gallery-item").addEventListener("click", () => openLightbox(index));
+    galleryThumbs.forEach((thumb, index) => {
+      thumb.addEventListener("click", () => {
+        if (hasDraggedGallery) {
+          return;
+        }
+
+        updateGalleryMain(index);
+      });
     });
 
-    lightboxClose.addEventListener("click", closeLightbox);
-    lightboxPrev.addEventListener("click", () => renderLightbox(activeGalleryIndex - 1));
-    lightboxNext.addEventListener("click", () => renderLightbox(activeGalleryIndex + 1));
+    if (galleryMain) {
+      galleryMain.addEventListener("click", () => openLightbox());
+    }
 
-    lightbox.addEventListener("click", (event) => {
-      if (event.target === lightbox) {
-        closeLightbox();
-      }
-    });
+    if (galleryStrip) {
+      galleryStrip.addEventListener("scroll", requestGalleryCenterSync, { passive: true });
+
+      galleryStrip.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "mouse") {
+          return;
+        }
+
+        isDraggingGallery = true;
+        hasDraggedGallery = false;
+        galleryDragStartX = event.clientX;
+        galleryDragStartScrollLeft = galleryStrip.scrollLeft;
+        galleryStrip.setPointerCapture(event.pointerId);
+      });
+
+      galleryStrip.addEventListener("pointermove", (event) => {
+        if (!isDraggingGallery) {
+          return;
+        }
+
+        const dragDistance = event.clientX - galleryDragStartX;
+
+        if (Math.abs(dragDistance) > 4) {
+          hasDraggedGallery = true;
+        }
+
+        galleryStrip.scrollLeft = galleryDragStartScrollLeft - dragDistance;
+      });
+
+      galleryStrip.addEventListener("pointerup", (event) => {
+        if (!isDraggingGallery) {
+          return;
+        }
+
+        isDraggingGallery = false;
+        if (galleryStrip.hasPointerCapture(event.pointerId)) {
+          galleryStrip.releasePointerCapture(event.pointerId);
+        }
+        window.setTimeout(() => {
+          hasDraggedGallery = false;
+        }, 0);
+      });
+
+      galleryStrip.addEventListener("pointercancel", () => {
+        isDraggingGallery = false;
+        hasDraggedGallery = false;
+      });
+
+      galleryStrip.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          updateGalleryMain(activeGalleryIndex - 1);
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          updateGalleryMain(activeGalleryIndex + 1);
+        }
+      });
+    }
+
+    if (lightboxClose) {
+      lightboxClose.addEventListener("click", closeLightbox);
+    }
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener("click", () => renderLightbox(activeGalleryIndex - 1));
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener("click", () => renderLightbox(activeGalleryIndex + 1));
+    }
+
+    if (lightbox) {
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+      });
+    }
 
     document.addEventListener("keydown", (event) => {
+      if (!lightbox) {
+        return;
+      }
+
       if (!lightbox.classList.contains("is-open")) {
         return;
       }
@@ -737,6 +928,8 @@
         renderLightbox(activeGalleryIndex + 1);
       }
     });
+
+    updateGalleryMain(activeGalleryIndex, { animate: false, scroll: false });
 
     fetchWishes();
 
