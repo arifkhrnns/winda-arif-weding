@@ -4,7 +4,7 @@
     const wishesEnabled =
       !SUPABASE_URL.includes("YOUR_") &&
       !SUPABASE_ANON_KEY.includes("YOUR_");
-    const targetDate = new Date("2026-07-05T08:00:00+07:00").getTime();
+    const targetDate = new Date("2026-07-05T09:00:00+07:00").getTime();
     const countdownIds = {
       days: document.getElementById("days"),
       hours: document.getElementById("hours"),
@@ -36,7 +36,7 @@
     }
 
     function buildCalendarFile() {
-      const startDate = new Date("2026-07-05T08:00:00+07:00");
+      const startDate = new Date("2026-07-05T09:00:00+07:00");
       const endDate = new Date("2026-07-05T15:30:00+07:00");
       const createdDate = new Date();
       const icsContent = [
@@ -50,8 +50,8 @@
         `DTSTART:${formatIcsDate(startDate)}`,
         `DTEND:${formatIcsDate(endDate)}`,
         "SUMMARY:Winda & Arif Wedding Day",
-        "DESCRIPTION:Akad Nikah pukul 08.00 WIB dan resepsi sesuai waktu yang tertera pada undangan Anda.",
-        "LOCATION:Gedung Serbaguna Ath Thoyyibah, Bekasi",
+        "DESCRIPTION:Akad Nikah pukul 09.00 WIB dan resepsi sesuai waktu yang tertera pada undangan Anda.",
+        "LOCATION:Gedung Serbaguna Masjid Ath Thoyyibah, Bekasi",
         "END:VEVENT",
         "END:VCALENDAR"
       ].join("\r\n");
@@ -678,8 +678,9 @@
       });
     }
 
-    const galleryThumbs = Array.from(document.querySelectorAll("[data-gallery-thumb]"));
-    const galleryItems = galleryThumbs
+    const originalGalleryThumbs = Array.from(document.querySelectorAll("[data-gallery-thumb]"));
+    let galleryThumbs = originalGalleryThumbs;
+    const galleryItems = originalGalleryThumbs
       .map((thumb) => thumb.querySelector("img"))
       .filter(Boolean);
     const galleryMain = document.querySelector("[data-gallery-open]");
@@ -693,13 +694,103 @@
     const lightboxNext = document.getElementById("lightboxNext");
     let activeGalleryIndex = Math.max(
       0,
-      galleryThumbs.findIndex((thumb) => thumb.classList.contains("is-active"))
+      originalGalleryThumbs.findIndex((thumb) => thumb.classList.contains("is-active"))
     );
     let galleryScrollFrame = 0;
+    let galleryLoopStep = 0;
+    let isNormalizingGalleryScroll = false;
     let isDraggingGallery = false;
     let hasDraggedGallery = false;
     let galleryDragStartX = 0;
     let galleryDragStartScrollLeft = 0;
+
+    function refreshGalleryThumbs() {
+      galleryThumbs = Array.from(document.querySelectorAll("[data-gallery-thumb]"));
+    }
+
+    function getGalleryIndexFromThumb(thumb) {
+      const index = Number(thumb.dataset.galleryIndex);
+
+      if (Number.isFinite(index)) {
+        return index;
+      }
+
+      return Math.max(0, originalGalleryThumbs.indexOf(thumb));
+    }
+
+    function getGalleryThumbForIndex(index, options = {}) {
+      const matches = galleryThumbs.filter((thumb) => getGalleryIndexFromThumb(thumb) === index);
+
+      if (!matches.length) {
+        return null;
+      }
+
+      if (options.preferBase) {
+        return matches.find((thumb) => thumb.dataset.gallerySet === "base") || matches[0];
+      }
+
+      if (!galleryStrip) {
+        return matches[0];
+      }
+
+      const stripRect = galleryStrip.getBoundingClientRect();
+      const stripCenter = stripRect.left + stripRect.width / 2;
+
+      return matches.reduce((closestThumb, thumb) => {
+        const closestRect = closestThumb.getBoundingClientRect();
+        const thumbRect = thumb.getBoundingClientRect();
+        const closestDistance = Math.abs((closestRect.left + closestRect.width / 2) - stripCenter);
+        const thumbDistance = Math.abs((thumbRect.left + thumbRect.width / 2) - stripCenter);
+
+        return thumbDistance < closestDistance ? thumb : closestThumb;
+      }, matches[0]);
+    }
+
+    function cloneGalleryThumb(thumb, index, setName) {
+      const clone = thumb.cloneNode(true);
+      clone.classList.remove("is-active");
+      clone.dataset.galleryIndex = String(index);
+      clone.dataset.gallerySet = setName;
+      clone.setAttribute("aria-selected", "false");
+
+      return clone;
+    }
+
+    function measureGalleryLoop() {
+      if (!galleryStrip || originalGalleryThumbs.length < 2) {
+        galleryLoopStep = 0;
+        return;
+      }
+
+      const firstBeforeThumb = galleryStrip.querySelector('[data-gallery-set="before"][data-gallery-index="0"]');
+      const firstBaseThumb = galleryStrip.querySelector('[data-gallery-set="base"][data-gallery-index="0"]');
+
+      if (!firstBeforeThumb || !firstBaseThumb) {
+        galleryLoopStep = 0;
+        return;
+      }
+
+      galleryLoopStep = firstBaseThumb.offsetLeft - firstBeforeThumb.offsetLeft;
+    }
+
+    function setupLoopingGalleryStrip() {
+      originalGalleryThumbs.forEach((thumb, index) => {
+        thumb.dataset.galleryIndex = String(index);
+        thumb.dataset.gallerySet = "base";
+      });
+
+      if (!galleryStrip || originalGalleryThumbs.length < 2) {
+        refreshGalleryThumbs();
+        return;
+      }
+
+      const beforeThumbs = originalGalleryThumbs.map((thumb, index) => cloneGalleryThumb(thumb, index, "before"));
+      const afterThumbs = originalGalleryThumbs.map((thumb, index) => cloneGalleryThumb(thumb, index, "after"));
+
+      beforeThumbs.forEach((thumb) => galleryStrip.insertBefore(thumb, originalGalleryThumbs[0]));
+      afterThumbs.forEach((thumb) => galleryStrip.appendChild(thumb));
+      refreshGalleryThumbs();
+    }
 
     function updateGalleryMain(index, options = {}) {
       if (!galleryItems.length || !galleryMainImage) {
@@ -709,7 +800,9 @@
       const total = galleryItems.length;
       activeGalleryIndex = (index + total) % total;
       const activeImage = galleryItems[activeGalleryIndex];
-      const activeThumb = galleryThumbs[activeGalleryIndex];
+      const activeThumb = getGalleryThumbForIndex(activeGalleryIndex, {
+        preferBase: options.preferBase
+      });
       const activeSrc = activeImage.currentSrc || activeImage.src;
 
       if (galleryMain && options.animate !== false) {
@@ -723,8 +816,8 @@
         galleryMain.style.setProperty("--gallery-active-bg", `url("${activeSrc}")`);
       }
 
-      galleryThumbs.forEach((thumb, thumbIndex) => {
-        const isActive = thumbIndex === activeGalleryIndex;
+      galleryThumbs.forEach((thumb) => {
+        const isActive = getGalleryIndexFromThumb(thumb) === activeGalleryIndex;
         thumb.classList.toggle("is-active", isActive);
         thumb.setAttribute("aria-selected", String(isActive));
       });
@@ -766,8 +859,46 @@
       return centeredIndex;
     }
 
+    function normalizeGalleryLoop() {
+      if (!galleryStrip || !galleryLoopStep || isNormalizingGalleryScroll) {
+        return false;
+      }
+
+      const firstBaseThumb = galleryStrip.querySelector('[data-gallery-set="base"][data-gallery-index="0"]');
+      const firstAfterThumb = galleryStrip.querySelector('[data-gallery-set="after"][data-gallery-index="0"]');
+
+      if (!firstBaseThumb || !firstAfterThumb) {
+        return false;
+      }
+
+      const stripCenterPosition = galleryStrip.scrollLeft + galleryStrip.clientWidth / 2;
+      let scrollOffset = 0;
+
+      if (stripCenterPosition < firstBaseThumb.offsetLeft) {
+        scrollOffset = galleryLoopStep;
+      } else if (stripCenterPosition >= firstAfterThumb.offsetLeft) {
+        scrollOffset = -galleryLoopStep;
+      }
+
+      if (!scrollOffset) {
+        return false;
+      }
+
+      isNormalizingGalleryScroll = true;
+      galleryStrip.scrollLeft += scrollOffset;
+      isNormalizingGalleryScroll = false;
+
+      return true;
+    }
+
     function syncGalleryMainToCenter() {
       galleryScrollFrame = 0;
+
+      if (normalizeGalleryLoop()) {
+        requestGalleryCenterSync();
+        return;
+      }
+
       const centeredIndex = getCenteredGalleryIndex();
 
       if (centeredIndex !== activeGalleryIndex) {
@@ -818,15 +949,37 @@
       lightboxImage.src = "";
     }
 
-    galleryThumbs.forEach((thumb, index) => {
-      thumb.addEventListener("click", () => {
+    setupLoopingGalleryStrip();
+
+    if (galleryStrip) {
+      window.requestAnimationFrame(() => {
+        measureGalleryLoop();
+        updateGalleryMain(activeGalleryIndex, {
+          animate: false,
+          preferBase: true,
+          scrollBehavior: "auto"
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        measureGalleryLoop();
+        requestGalleryCenterSync();
+      });
+
+      galleryStrip.addEventListener("click", (event) => {
+        const thumb = event.target.closest("[data-gallery-thumb]");
+
+        if (!thumb || !galleryStrip.contains(thumb)) {
+          return;
+        }
+
         if (hasDraggedGallery) {
           return;
         }
 
-        updateGalleryMain(index);
+        updateGalleryMain(getGalleryIndexFromThumb(thumb));
       });
-    });
+    }
 
     if (galleryMain) {
       galleryMain.addEventListener("click", () => openLightbox());
@@ -928,8 +1081,6 @@
         renderLightbox(activeGalleryIndex + 1);
       }
     });
-
-    updateGalleryMain(activeGalleryIndex, { animate: false, scroll: false });
 
     fetchWishes();
 
