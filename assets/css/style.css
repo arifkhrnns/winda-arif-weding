@@ -1339,8 +1339,10 @@
 
     .reveal {
       opacity: 0;
-      transform: translateY(26px);
-      transition: opacity .8s ease, transform .8s ease;
+      transform: translateY(34px);
+      transition:
+        opacity 1.15s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .reveal.is-visible {

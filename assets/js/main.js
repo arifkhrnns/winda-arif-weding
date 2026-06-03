@@ -79,11 +79,19 @@
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.14) {
           entry.target.classList.add("is-visible");
+          return;
+        }
+
+        if (!entry.isIntersecting) {
+          entry.target.classList.remove("is-visible");
         }
       });
-    }, { threshold: 0.18 });
+    }, {
+      threshold: [0, 0.14],
+      rootMargin: "0px 0px -8% 0px"
+    });
 
     document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
 
