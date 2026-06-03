@@ -1343,7 +1343,7 @@
       padding: 24px;
       background:
         linear-gradient(180deg, rgba(44, 28, 20, 0.58), rgba(44, 28, 20, 0.84)),
-        url("../images/overlay-cover.jpg") center/cover no-repeat;
+        url("../images/bg-img.png") center/cover no-repeat;
       transition: opacity .45s ease, visibility .45s ease;
     }
 
