@@ -79,7 +79,7 @@
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.14) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.08) {
           entry.target.classList.add("is-visible");
           return;
         }
@@ -89,8 +89,8 @@
         }
       });
     }, {
-      threshold: [0, 0.14],
-      rootMargin: "0px 0px -8% 0px"
+      threshold: [0, 0.08],
+      rootMargin: "0px 0px -12% 0px"
     });
 
     document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
@@ -110,6 +110,27 @@
     let openingFinished = false;
     let userPausedAudio = false;
     let autoPausedAudio = false;
+
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    function resetInvitationScroll() {
+      if (experienceScroll) {
+        experienceScroll.scrollTop = 0;
+        experienceScroll.scrollLeft = 0;
+      }
+
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener("pageshow", () => {
+      if (body.classList.contains("locked")) {
+        resetInvitationScroll();
+      }
+    });
 
     function shouldProxyScroll() {
       return desktopExperienceQuery.matches && experienceScroll && !body.classList.contains("locked");
@@ -166,12 +187,14 @@
     async function openInvitationContent(options = {}) {
       const { playMusic = true } = options;
 
+      resetInvitationScroll();
       overlay.classList.add("is-hidden");
       body.classList.remove("locked");
       invitationOpened = true;
       userPausedAudio = false;
       autoPausedAudio = false;
       updateStoryProgress();
+      window.requestAnimationFrame(resetInvitationScroll);
 
       if (playMusic) {
         await playAudio();
@@ -746,6 +769,36 @@
       }, matches[0]);
     }
 
+    function centerGalleryThumb(thumb, behavior = "smooth") {
+      if (!galleryStrip || !thumb) {
+        return;
+      }
+
+      const stripRect = galleryStrip.getBoundingClientRect();
+      const thumbRect = thumb.getBoundingClientRect();
+      const targetLeft = galleryStrip.scrollLeft +
+        (thumbRect.left + thumbRect.width / 2) -
+        (stripRect.left + stripRect.width / 2);
+
+      if (behavior === "auto") {
+        const previousScrollBehavior = galleryStrip.style.scrollBehavior;
+        galleryStrip.style.scrollBehavior = "auto";
+        galleryStrip.scrollLeft = targetLeft;
+        galleryStrip.style.scrollBehavior = previousScrollBehavior;
+        return;
+      }
+
+      if (typeof galleryStrip.scrollTo === "function") {
+        galleryStrip.scrollTo({
+          left: targetLeft,
+          behavior
+        });
+        return;
+      }
+
+      galleryStrip.scrollLeft = targetLeft;
+    }
+
     function cloneGalleryThumb(thumb, index, setName) {
       const clone = thumb.cloneNode(true);
       clone.classList.remove("is-active");
@@ -823,11 +876,7 @@
       });
 
       if (activeThumb && options.scroll !== false) {
-        activeThumb.scrollIntoView({
-          block: "nearest",
-          inline: "center",
-          behavior: options.scrollBehavior || "smooth"
-        });
+        centerGalleryThumb(activeThumb, options.scrollBehavior || "smooth");
       }
 
       if (galleryMain && options.animate !== false) {
