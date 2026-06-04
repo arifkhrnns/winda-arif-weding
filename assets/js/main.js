@@ -37,7 +37,7 @@
 
     function buildCalendarFile() {
       const startDate = new Date("2026-07-05T09:00:00+07:00");
-      const endDate = new Date("2026-07-05T15:30:00+07:00");
+      const endDate = new Date("2026-07-05T15:00:00+07:00");
       const createdDate = new Date();
       const icsContent = [
         "BEGIN:VCALENDAR",
@@ -325,8 +325,8 @@
         intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
       },
       "2": {
-        label: "13.30 - 15.30 WIB",
-        time: "Minggu, 5 Juli 2026<br />13.30 WIB - 15.30 WIB",
+        label: "13.00 - 15.00 WIB",
+        time: "Minggu, 5 Juli 2026<br />13.00 WIB - 15.00 WIB",
         note: "Mohon hadir sesuai waktu yang tertera pada undangan.",
         intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
       }
