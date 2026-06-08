@@ -106,6 +106,7 @@
     const storyTimeline = document.querySelector(".story-grid");
     const desktopExperienceQuery = window.matchMedia("(min-width: 821px)");
     const openingNameTime = 10;
+    const openingScrollHintTime = 13;
     let invitationOpened = false;
     let openingFinished = false;
     let userPausedAudio = false;
@@ -205,6 +206,10 @@
       if (openingVideo.currentTime >= openingNameTime) {
         openingSection.classList.add("show-names");
       }
+
+      if (openingVideo.currentTime >= openingScrollHintTime) {
+        openingSection.classList.add("show-scroll-hint");
+      }
     }
 
     async function finishOpeningVideo() {
@@ -216,7 +221,7 @@
       openingVideo.pause();
       openingVideo.removeEventListener("timeupdate", handleOpeningVideoTime);
       openingSection.classList.remove("is-active");
-      openingSection.classList.add("is-ended", "show-names");
+      openingSection.classList.add("is-ended", "show-names", "show-scroll-hint");
 
       if (!userPausedAudio && bgMusic.paused) {
         await playAudio();
@@ -231,7 +236,7 @@
       }
 
       openingFinished = false;
-      openingSection.classList.remove("is-ended", "show-names");
+      openingSection.classList.remove("is-ended", "show-names", "show-scroll-hint");
       openingSection.classList.add("is-active");
       openingVideo.loop = false;
       openingVideo.muted = false;
@@ -322,13 +327,13 @@
         label: "11.00 - 13.00 WIB",
         time: "Minggu, 5 Juli 2026<br />11.00 WIB - 13.00 WIB",
         note: "Mohon hadir sesuai waktu yang tertera pada undangan.",
-        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
+        intro: "Sebuah perayaan hangat bersama keluarga, sahabat, dan orang terkasih."
       },
       "2": {
         label: "13.00 - 15.00 WIB",
         time: "Minggu, 5 Juli 2026<br />13.00 WIB - 15.00 WIB",
         note: "Mohon hadir sesuai waktu yang tertera pada undangan.",
-        intro: "Sebuah selebrasi hangat bersama keluarga, sahabat, dan orang terkasih."
+        intro: "Sebuah perayaan hangat bersama keluarga, sahabat, dan orang terkasih."
       }
     };
 

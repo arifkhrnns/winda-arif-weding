@@ -411,7 +411,9 @@
     }
 
     .couple-card h3 {
-      font-size: clamp(36px, 4vw, 48px);
+      font-size: clamp(25px, 3.2vw, 36px);
+      line-height: 1.06;
+      white-space: nowrap;
     }
 
     .couple-card .family {
@@ -1539,10 +1541,102 @@
 
     .opening-video__names strong {
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(54px, 12vw, 112px);
+      font-size: clamp(46px, 10vw, 92px);
       font-weight: 700;
       line-height: 0.9;
       letter-spacing: 0;
+    }
+
+    .scroll-hint {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      color: var(--gold-deep);
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      transition: opacity 1s ease, transform 1s ease;
+      pointer-events: none;
+    }
+
+    .opening-video.show-scroll-hint .scroll-hint {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .scroll-hint__icon {
+      position: relative;
+      width: 34px;
+      height: 54px;
+      border: 2px solid rgba(183, 139, 88, 0.36);
+      border-radius: 999px;
+      background: rgba(255, 250, 244, 0.38);
+      box-shadow: 0 10px 24px rgba(45, 34, 28, 0.1);
+      animation: scrollHintFloat 2.4s ease-in-out infinite;
+    }
+
+    .scroll-hint__icon::before,
+    .scroll-hint__icon::after,
+    .scroll-hint__icon span {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 15px;
+      width: 11px;
+      height: 11px;
+      border-right: 3px solid currentColor;
+      border-bottom: 3px solid currentColor;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .scroll-hint__icon::before {
+      bottom: 25px;
+      opacity: 0.28;
+      animation: scrollHintArrow 2.4s ease-in-out infinite;
+    }
+
+    .scroll-hint__icon span {
+      opacity: 0.92;
+      animation: scrollHintArrow 2.4s ease-in-out infinite .18s;
+    }
+
+    .scroll-hint__icon::after {
+      bottom: 5px;
+      opacity: 0.18;
+      animation: scrollHintArrow 2.4s ease-in-out infinite .36s;
+    }
+
+    .scroll-hint p {
+      margin: 0;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 250, 244, 0.54);
+      color: var(--gold-deep);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      text-shadow: 0 2px 12px rgba(255, 250, 244, 0.72);
+    }
+
+    @keyframes scrollHintFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(5px);
+      }
+    }
+
+    @keyframes scrollHintArrow {
+      0%, 100% {
+        transform: translate(-50%, -4px) rotate(45deg);
+      }
+      50% {
+        transform: translate(-50%, 5px) rotate(45deg);
+      }
     }
 
     .overlay-card {
