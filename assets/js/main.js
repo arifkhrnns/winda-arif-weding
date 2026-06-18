@@ -635,7 +635,7 @@
 
           wishForm.reset();
           await fetchWishes();
-          setWishStatus("Ucapan berhasil dikirim dan langsung tampil.");
+          setWishStatus("Terima kasih atas doa dan ucapannya.");
         } catch (error) {
           console.error(error);
           setWishStatus("Ucapan belum berhasil dikirim. Coba lagi beberapa saat lagi.");
@@ -696,7 +696,7 @@
 
           guestbookForm.reset();
           await fetchWishes();
-          setGuestbookStatus("Konfirmasi dan ucapan berhasil dikirim dan langsung tampil.");
+          setGuestbookStatus("Terima kasih atas doa dan ucapannya.");
         } catch (error) {
           console.error(error);
           setGuestbookStatus("Konfirmasi belum berhasil dikirim. Coba lagi beberapa saat lagi.");
