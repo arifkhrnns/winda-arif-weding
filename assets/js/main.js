@@ -544,7 +544,7 @@
 
       try {
         let response = await fetch(
-          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,attendance_status,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
+          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,attendance_status,created_at&order=created_at.desc&limit=20`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -555,7 +555,7 @@
 
         if (!response.ok) {
           response = await fetch(
-            `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&is_approved=eq.true&order=created_at.desc&limit=20`,
+            `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&order=created_at.desc&limit=20`,
             {
               headers: {
                 apikey: SUPABASE_ANON_KEY,
@@ -635,7 +635,7 @@
 
           wishForm.reset();
           await fetchWishes();
-          setWishStatus("Ucapan berhasil dikirim dan akan tampil setelah disetujui.");
+          setWishStatus("Ucapan berhasil dikirim dan langsung tampil.");
         } catch (error) {
           console.error(error);
           setWishStatus("Ucapan belum berhasil dikirim. Coba lagi beberapa saat lagi.");
@@ -696,7 +696,7 @@
 
           guestbookForm.reset();
           await fetchWishes();
-          setGuestbookStatus("Konfirmasi dan ucapan berhasil dikirim. Ucapan akan tampil setelah disetujui.");
+          setGuestbookStatus("Konfirmasi dan ucapan berhasil dikirim dan langsung tampil.");
         } catch (error) {
           console.error(error);
           setGuestbookStatus("Konfirmasi belum berhasil dikirim. Coba lagi beberapa saat lagi.");
