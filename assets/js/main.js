@@ -544,7 +544,7 @@
 
       try {
         let response = await fetch(
-          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,attendance_status,created_at&order=created_at.desc&limit=20`,
+          `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,attendance_status,created_at&order=created_at.desc&limit=100`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -555,7 +555,7 @@
 
         if (!response.ok) {
           response = await fetch(
-            `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&order=created_at.desc&limit=20`,
+            `${SUPABASE_URL}/rest/v1/${SUPABASE_WISHES_TABLE}?select=id,name,message,created_at&order=created_at.desc&limit=100`,
             {
               headers: {
                 apikey: SUPABASE_ANON_KEY,
